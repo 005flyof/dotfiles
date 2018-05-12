@@ -36,6 +36,7 @@ if [ $# -gt 0 ]; then
 	files="$@"
 else
 	# If no arguments, ask the user to copy all files
+	echo ""
 	msg="Do you really want to install all dotfiles from the repository? (y/n) "
 	read -p "$msg" answer
 	while [[ "$answer" != "y" && "$answer" != "n" ]]; do
@@ -53,8 +54,19 @@ fi
 # Move any existing dotfiles in homedir to dotfiles_old directory,
 # then create symlinks
 for file in $files; do
-	echo "Moving any existing '.$file' from ~ to '$dir/$olddir'"
-	mv ~/.$file $dir/$olddir/
-	echo "Creating symlink to $file in home directory."
-	ln -s $dir/$file ~/.$file
+	echo ""
+	# Only if there is a new configuration
+	if [ ! -f "$dir/$file" ]; then
+		echo "The dotfile $file doesn't exist in the repository!"
+	else
+		if [ -f "~/.$file" ]; then
+			echo "Moving '.$file' from ~ to '$dir/$olddir'"
+			mv ~/.$file $dir/$olddir/
+		fi
+
+		echo "Creating symlink to $file in home directory."
+		ln -s $dir/$file ~/.$file
+	fi
 done
+
+echo ""
