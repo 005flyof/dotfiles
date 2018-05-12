@@ -61,7 +61,7 @@ for file in $files; do
 	else
 		if [ -f "~/.$file" ]; then
 			echo "Moving '.$file' from ~ to '$dir/$olddir'"
-			mv ~/.$file $dir/$olddir/
+			mv ~/.$file $dir/$olddir/$file
 		fi
 
 		echo "Creating symlink to $file in home directory."
